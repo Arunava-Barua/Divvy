@@ -9,10 +9,11 @@ import { DivvyProvider } from "../context/DivvyContext";
 function MyApp({ Component, pageProps }) {
   return (
     <DivvyProvider>
-      <ThemeProvider attribute="class">
-        <div className="dark:bg-nft-dark bg-white min-h-screen ">
+      <script src='./TW-ELEMENTS-PATH/dist/js/index.min.js'></script>
+      <ThemeProvider attribute='class'>
+        <div className='dark:bg-nft-dark bg-white min-h-screen '>
           <Navbar />
-          <div className="pt-65">
+          <div className='pt-65'>
             <Component {...pageProps} />
           </div>
           <Footer />

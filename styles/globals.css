@@ -16,13 +16,17 @@
 
   /* Created with https://www.css-gradient.com */
   background: #f36865;
-  background: -webkit-linear-gradient(bottom right, #f36865, #e3981f);
+  background: -webkit-linear-gradient(
+    bottom right,
+    rgb(243, 104, 101),
+    #e3981f
+  );
   background: -moz-linear-gradient(bottom right, #f36865, #e3981f);
   background: linear-gradient(to top left, #f36865, #e3981f);
 }
 
 .white-bg {
-  background: rgba(255, 255, 255, 0.2);
+  background: #ffffff33;
 }
 
 .nav-h {
@@ -185,9 +189,15 @@
 .white-glassmorphism {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.cryptobg {
+  background-image: url("../assets/constellation.svg");
+  border-radius: 16px;
+  border: 1px solid rgb(77, 77, 77);
 }
 
 .eth-card {
@@ -215,4 +225,13 @@
     radial-gradient(at 100% 60%, rgb(0, 0, 0) 0, transparent 50%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.shadow-grad {
+  box-shadow: -10px -10px 30px 4px rgba(227, 152, 31, 0.07),
+    10px 10px 30px 4px rgba(243, 104, 101, 0.07);
+}
+
+.slider-main li.slick-active button:before {
+  color: white;
 }
