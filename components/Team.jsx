@@ -1,18 +1,18 @@
 import React from 'react';
 import Image from "next/image";
-// import styles from '../styles/Home.module.css'
+
 import images from "../assets";
 
 const Team = () => {
   return (
-    <div className="p-8 bg-white dark:bg-gray-800 rounded-lg shadow">
+    <div className="p-8 bg-nft-dark rounded-lg shadow h-[49.2rem]">
       <p className="text-center text-3xl font-bold text-gray-800 dark:text-white ">
         Professional team
       </p>
       <p className="text-center mb-12 text-xl font-normal text-gray-500 dark:text-gray-200">
         Meet the best team in world
       </p>
-      <div className="flex items-center md:flex-col justify evenly justify-center space-x-14">
+      <div className="flex items-center md:flex-col justify evenly justify-center space-x-14 h-70">
         <div className="p-4">
           <div className="text-center mb-4 opacity-90">
             <a href="#" className="block relative">
