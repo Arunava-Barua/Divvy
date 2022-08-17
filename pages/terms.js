@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Slider from "react-slick";
+import styled from "styled-components";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -21,7 +22,7 @@ const terms = () => {
     <div className='flex items-center justify-center w-full nav-h'>
       {/* <div className='p-52 bg-red-400'>apple</div> */}
       <div className='overflow-hidden pl-36 pr-36 pt-36 pb-36'>
-        <div className='rounded-2xl shadow-grad cryptobg'>
+        <div className='rounded-2xl shadow-grad'>
           <Slider
             {...settings}
             className='min-h-[200px] rounded-2xl p-3 backdrop-blur-sm slider-main'
@@ -66,3 +67,34 @@ const terms = () => {
 };
 
 export default terms;
+
+// const Carousel = styled(Slider)`
+//   margin-top: 20px;
+
+//   & > button {
+//     opacity: 0;
+//   }
+
+//   ul li button {
+//     &:before {
+//       font-size: 10px;
+//       color: rgb(150, 158, 171);
+//     }
+//   }
+
+//   li.slick-active button:before {
+//     color: white;
+//   }
+
+//   .slick-list {
+//     overflow: initial;
+//   }
+
+//   .slick-prev {
+//     left: -75px;
+//   }
+
+//   .slick-next {
+//     right: -75px;
+//   }
+// `;
