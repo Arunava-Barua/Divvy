@@ -96,7 +96,7 @@ const FormFillUp = () => {
       const url = `https://divvy-bank.infura-ipfs.io/ipfs/${added.path}`;
 
       console.log(`URL ---> ${url}`);
-      router.push("/");
+      router.push("/loandashboard");
     } catch (error) {
       console.log("Error uploading file to IPFS.");
     }
@@ -165,18 +165,10 @@ const FormFillUp = () => {
 
         <Input
           inputType='input'
-          title='Name'
-          placeholder='Enter your full name'
+          title='Wallet Address'
+          placeholder='Enter your wallet address'
           handleClick={(e) =>
             setFormInput({ ...formInput, name: e.target.value })
-          }
-        />
-        <Input
-          inputType='textarea'
-          title='Description'
-          placeholder='Loan requirements'
-          handleClick={(e) =>
-            setFormInput({ ...formInput, description: e.target.value })
           }
         />
         <Input
@@ -187,10 +179,18 @@ const FormFillUp = () => {
             setFormInput({ ...formInput, price: e.target.value })
           }
         />
+        <Input
+          inputType='input'
+          title='Tenure'
+          placeholder='Enter loan duration'
+          handleClick={(e) =>
+            setFormInput({ ...formInput, description: e.target.value })
+          }
+        />
 
         <div className='mt-7 w-full flex justify-end'>
           <Button
-            btnName='Create NFT'
+            btnName='Submit'
             classStyles='rounded-xl py-3'
             handleClick={() => createNFT(formInput, fileUrl, router)}
           />

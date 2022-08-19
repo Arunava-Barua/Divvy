@@ -1,18 +1,28 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0 < 0.9.0;
+pragma solidity >=0.7.0 <0.9.0;
 
-contract EscrowNew {
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+contract EscrowNew is ERC721URIStorage {
+    using Counters for Counters.Counter;
+
+    Counters.Counter private _tokenIds;
 
     // Variables
 
-    enum State {AWAITING_MORTGAGE, AWAITING_REPAYMENT, COMPLETE}
+    enum State {
+        AWAITING_MORTGAGE,
+        AWAITING_REPAYMENT,
+        COMPLETE
+    }
     State public currState;
 
     uint public creationTime;
 
-
-    // Can use structs 
+    // Can use structs
 
     bool public isBuyerIn;
     bool public isSellerIn;
@@ -27,11 +37,11 @@ contract EscrowNew {
     Payment public payment;
 
     address public buyer;
-    address payable public seller;
+    address payable public owner;
 
     uint public intervalTimes;
-    uint public interval = (30 days); 
-    
+    uint public interval = (30 days);
+
     // Modifiers
 
     modifier onlyBuyer() {
@@ -40,29 +50,38 @@ contract EscrowNew {
     }
 
     modifier onlySeller() {
-        require(msg.sender == seller, "Only seller can call this function!");
+        require(msg.sender == owner, "Only owner can call this function!");
         _;
     }
 
-    event initEvent (address _buyer,  uint _loanAmount, uint _tenure);
-    event NFTReceivedEvent (uint _id);
-    event installmentPaidEvent (uint installment, uint installmentNumber);
-    event FullPaidEvent (uint installment, uint installmentNumber);
+    event initEvent(address _buyer, uint _loanAmount, uint _tenure);
+    event NFTReceivedEvent(uint _id);
+    event installmentPaidEvent(uint installment, uint installmentNumber);
+    event FullPaidEvent(uint installment, uint installmentNumber);
 
-    constructor(address payable _seller) {
-        seller = _seller;
+    constructor(address payable _owner) ERC721("Divvy Token", "DVT") {
+        owner = _owner;
         creationTime = block.timestamp;
         isSellerIn = true;
         isBuyerIn = true;
-        
     }
 
-    function init(address _buyer,  uint _loanAmount, uint _tenure) public {
+    function init(
+        address _buyer,
+        uint _loanAmount,
+        uint _tenure
+    ) public {
         buyer = _buyer;
         intervalTimes = _tenure;
-        payment = Payment(_loanAmount * (1 ether), 0, _tenure * (30 days), 0, 0);
+        payment = Payment(
+            _loanAmount * (1 ether),
+            0,
+            _tenure * (30 days),
+            0,
+            0
+        );
 
-        payment.repayAmount = payment.loanAmount + (payment.loanAmount/5);
+        payment.repayAmount = payment.loanAmount + (payment.loanAmount / 5);
         payment.penalty = (payment.repayAmount / 10);
         payment.payoutPerMonth = payment.repayAmount / intervalTimes;
 
@@ -70,43 +89,73 @@ contract EscrowNew {
     }
 
     function receiveNft() public onlyBuyer {
-        require(currState == State.AWAITING_MORTGAGE, "You cannot deposit mortgage");
+        require(
+            currState == State.AWAITING_MORTGAGE,
+            "You cannot deposit mortgage"
+        );
 
         currState = State.AWAITING_REPAYMENT;
     }
 
     // Pay the due amount (periodically)
-    function pay() onlyBuyer public payable {
-        //************************************************************************************************ */
-        require(msg.value == payment.payoutPerMonth, "Amount not accurate. Try again!");
+    function pay() public payable onlyBuyer {
+        //****************************************************************** */
+        require(
+            msg.value == payment.payoutPerMonth,
+            "Amount not accurate. Try again!"
+        );
 
-        if (intervalTimes == 0 && payment.repayAmount == 0) currState = State.COMPLETE;
-        
-        require(currState == State.AWAITING_REPAYMENT, "Repayment not started yet or you already paid");
+        if (intervalTimes == 0 && payment.repayAmount == 0)
+            currState = State.COMPLETE;
+
+        require(
+            currState == State.AWAITING_REPAYMENT,
+            "Repayment not started yet or you already paid"
+        );
         require(intervalTimes > 0, "You have 0 installments to pay");
 
         // Pay periodically
 
         payment.repayAmount -= msg.value;
-        intervalTimes --;
-        seller.transfer(msg.value);
-
+        intervalTimes--;
+        owner.transfer(msg.value);
     }
 
-    function payInFull() onlyBuyer public payable {
-        //************************************************************************************************ */
-        require(payment.repayAmount != 0, "You already paid"); 
-        require(currState == State.AWAITING_REPAYMENT, "You cannot repay now"); 
-        require(msg.value == payment.repayAmount + payment.penalty , "The repay amount is not enough"); // 10% Penalty for late repayment 
-        
+    function payInFull() public payable onlyBuyer {
+        //********************************************************************** */
+        require(payment.repayAmount != 0, "You already paid");
+        require(currState == State.AWAITING_REPAYMENT, "You cannot repay now");
+        require(
+            msg.value == payment.repayAmount + payment.penalty,
+            "The repay amount is not enough"
+        ); // 10% Penalty for late repayment
+
         payment.repayAmount = 0;
         intervalTimes = 0;
         currState = State.COMPLETE;
-        
-        seller.transfer(msg.value);
 
+        owner.transfer(msg.value);
     }
 
+    function createToken(string memory tokenURI, uint256 price)
+        public
+        payable
+        returns (uint256)
+    {
+        //increment token ID by one
+        _tokenIds.increment();
+
+        //get current value of token ids
+        uint256 newTokenId = _tokenIds.current();
+
+        //_mint => utility func that allows us to mint/create NFT
+        _mint(msg.sender, newTokenId);
+        _setTokenURI(newTokenId, tokenURI);
+
+        createMarketItem(newTokenId, price);
+
+        return newTokenId;
+    }
 
     function accBalance() external view returns (uint) {
         return address(this).balance;

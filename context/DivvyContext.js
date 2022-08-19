@@ -15,6 +15,7 @@ export const DivvyContext = React.createContext();
 export const DivvyProvider = ({ children }) => {
   const nftCurrency = "ETH";
   const [currentAccount, setCurrentAccount] = useState("");
+  let currAccountStorage = "";
   //   const [isLoadingNFT, setIsLoadingNFT] = useState(false);
 
   // Check if it is connected to wallet
@@ -45,7 +46,7 @@ export const DivvyProvider = ({ children }) => {
     setCurrentAccount(accounts[0]);
 
     // Reloading window
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (

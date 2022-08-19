@@ -11,7 +11,8 @@ import { DivvyContext } from "../context/DivvyContext";
 import images from "../assets";
 
 const ButtonGroup = ({ setActive, router, setIsOpen, isMobile }) => {
-  const { connectWallet, currentAccount } = useContext(DivvyContext);
+  const { connectWallet } = useContext(DivvyContext);
+
   return (
     <Button
       btnName='Connect'
@@ -22,6 +23,9 @@ const ButtonGroup = ({ setActive, router, setIsOpen, isMobile }) => {
 };
 
 const Navbar = () => {
+  const { currentAccount } = useContext(DivvyContext);
+  let admin = true;
+
   return (
     <nav className='flex justify-around w-screen fixed z-10 p-4 flex-row border-b dark:bg-nft-dark bg-white dark:border-nft-black-1 border-nft-gray-1'>
       {/* <div className="md:hidden flex justify-around"> */}
@@ -33,7 +37,40 @@ const Navbar = () => {
         alt='logo'
       />
       <div className='ml-4'>
-        <ButtonGroup />
+        {currentAccount && admin ? (
+          <>
+            <Button
+              btnName='Admin'
+              classStyles='mx-2 rounded-xl'
+              moveTo='/admin'
+            />
+            <Button
+              btnName='Invest'
+              classStyles='mx-2 rounded-xl'
+              moveTo='/pool'
+            />
+            <Button
+              btnName='Loan'
+              classStyles='mx-2 rounded-xl'
+              moveTo='/loan'
+            />
+          </>
+        ) : currentAccount ? (
+          <>
+            <Button
+              btnName='Invest'
+              classStyles='mx-2 rounded-xl'
+              moveTo='/pool'
+            />
+            <Button
+              btnName='Loan'
+              classStyles='mx-2 rounded-xl'
+              moveTo='/loan'
+            />
+          </>
+        ) : (
+          <ButtonGroup />
+        )}
       </div>
       {/* </div> */}
     </nav>
