@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { create } from "ipfs-http-client";
 
-// import { NFTContext } from "../context/NFTContext";
+import { DivvyContext } from "../context/DivvyContext.js";
 import { Button, Input, Loader } from "../components";
 import images from "../assets";
 
@@ -45,12 +45,12 @@ const FormFillUp = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const [fileUrl, setFileUrl] = useState(null);
-  const [formInput, setFormInput] = useState({
-    price: "",
-    name: "",
-    description: "",
-  });
-  // const { uploadToIPFS, createNFT, isLoadingNFT } = useContext(NFTContext);
+  // const [formInput, setFormInput] = useState({
+  //   price: "",
+  //   name: "",
+  //   description: "",
+  // });
+  const { formInput, setFormInput } = useContext(DivvyContext);
 
   const onDrop = useCallback(async (acceptedFile) => {
     //upload image to ipfs
@@ -168,7 +168,7 @@ const FormFillUp = () => {
           title='Wallet Address'
           placeholder='Enter your wallet address'
           handleClick={(e) =>
-            setFormInput({ ...formInput, name: e.target.value })
+            setFormInput({ ...formInput, walletAddress: e.target.value })
           }
         />
         <Input
@@ -176,7 +176,7 @@ const FormFillUp = () => {
           title='Amount'
           placeholder='Loan Amount'
           handleClick={(e) =>
-            setFormInput({ ...formInput, price: e.target.value })
+            setFormInput({ ...formInput, loanAmount: e.target.value })
           }
         />
         <Input
@@ -184,7 +184,7 @@ const FormFillUp = () => {
           title='Tenure'
           placeholder='Enter loan duration'
           handleClick={(e) =>
-            setFormInput({ ...formInput, description: e.target.value })
+            setFormInput({ ...formInput, tenure: e.target.value })
           }
         />
 

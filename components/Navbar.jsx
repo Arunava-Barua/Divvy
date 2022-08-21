@@ -47,7 +47,7 @@ const Navbar = () => {
             <Button
               btnName='Invest'
               classStyles='mx-2 rounded-xl'
-              moveTo='/pool'
+              moveTo='/investment'
             />
             <Button
               btnName='Loan'
@@ -60,7 +60,7 @@ const Navbar = () => {
             <Button
               btnName='Invest'
               classStyles='mx-2 rounded-xl'
-              moveTo='/pool'
+              moveTo='/investment'
             />
             <Button
               btnName='Loan'

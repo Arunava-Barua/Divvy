@@ -1,8 +1,11 @@
+const { ethers } = require("hardhat");
 const hre = require("hardhat");
 
 async function main() {
   const Divvy = await hre.ethers.getContractFactory("Divvy");
-  const divvy = await Divvy.deploy("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb922");
+  const divvy = await Divvy.deploy(
+    "0x5FbDB2315678afecb367f032d93F642f64180aa3" // pool address
+  );
 
   await divvy.deployed();
 

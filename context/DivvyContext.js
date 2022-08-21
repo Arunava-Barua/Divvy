@@ -3,7 +3,12 @@ import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import axios from "axios";
 
-import { DivvyAddress, DivvyAddressABI } from "./constants";
+import {
+  DivvyAddress,
+  DivvyAddressABI,
+  PoolAddress,
+  PoolAddressABI,
+} from "./constants";
 
 // const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
@@ -17,6 +22,22 @@ export const DivvyProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   let currAccountStorage = "";
   //   const [isLoadingNFT, setIsLoadingNFT] = useState(false);
+
+  const [formInput, setFormInput] = useState({
+    walletAddress: "",
+    loanAmount: "",
+    tenure: "",
+  });
+  const [investWithdrawInput, setInvestWithdrawInput] = useState({
+    invest: "",
+    withdraw: "",
+  });
+  const [loanID, setLoanID] = useState("");
+  const [adminState, setAdminState] = useState({
+    address: "",
+    amount: "",
+  });
+  const [poolBalance, setPoolBalance] = useState(0);
 
   // Check if it is connected to wallet
   const checkIfWalletIsConnect = async () => {
@@ -144,6 +165,135 @@ export const DivvyProvider = ({ children }) => {
     }
   };
 
+  const fetchPoolBalance = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(PoolAddress, PoolAddressABI, signer);
+      try {
+        const txRes = await contract.balance();
+        const res = ethers.utils.formatEther(txRes);
+        setPoolBalance(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const createTokenSubmit = async (url) => {
+    const { loanAmount, walletAddress, tenure } = formInput;
+
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const transaction = await contract.createToken(url);
+
+    await transaction.wait();
+    await contract.init(
+      walletAddress.toString(),
+      loanAmount.toString(),
+      tenure.toString(),
+      transaction
+    );
+  };
+
+  const createPayDue = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const dueAmount = await contract.installmentAmt();
+    const transaction = await contract.pay({
+      value: dueAmount.toString(),
+    });
+
+    await transaction.wait();
+  };
+
+  const createPayFull = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const repayAmount = await contract.fullPaymentWithPenalty();
+    const transaction = await contract.payInFull({
+      value: repayAmount.toString(),
+    });
+
+    await transaction.wait();
+  };
+
+  const createSettleLoan = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const settleLoan = await contract.settleLoan();
+
+    await settleLoan.wait();
+  };
+
+  const invest = async () => {
+    const { withdraw, invest } = investWithdrawInput;
+
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const receiveETH = await contract.receiveEther({
+      value: invest,
+    });
+
+    await receiveETH.wait();
+  };
+
+  const withdraw = async () => {
+    const { withdraw, invest } = investWithdrawInput;
+
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const withdrawAmt = await contract.withdraw(withdraw);
+
+    await withdrawAmt.wait();
+  };
+
+  const tranferETH = async () => {
+    const { amount, address } = adminState;
+
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = fetchContract(signer);
+
+    const transferETH = await contract.transferEther(amount, address);
+
+    await transferETH.wait();
+  };
+
   // const fetchInit = async () => {
   //   const web3Modal = new Web3Modal();
   //   const connection = await web3Modal.connect();
@@ -166,6 +316,23 @@ export const DivvyProvider = ({ children }) => {
         fetchRepayAmount,
         fetchInstallmentAmount,
         fetchTenure,
+        fetchPoolBalance,
+        formInput,
+        setFormInput,
+        investWithdrawInput,
+        setInvestWithdrawInput,
+        loanID,
+        setLoanID,
+        createTokenSubmit,
+        createPayDue,
+        createPayFull,
+        createSettleLoan,
+        invest,
+        withdraw,
+        adminState,
+        setAdminState,
+        tranferETH,
+        poolBalance,
       }}
     >
       {children}

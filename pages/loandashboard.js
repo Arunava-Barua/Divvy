@@ -13,6 +13,8 @@ const investment = () => {
     fetchRepayAmount,
     fetchInstallmentAmount,
     fetchTenure,
+    loanID,
+    setLoanID,
   } = useContext(DivvyContext);
   const [loanAmount, setLoanAmount] = useState(0);
   const [repayAmount, setRepayAmount] = useState(0);
@@ -108,6 +110,7 @@ const investment = () => {
                   placeholder='Enter Loan Id'
                   min='0'
                   className='m-5 h-full flex-1 w-full dark:bg-nft-black-2 bg-white px-4 rounded-md font-poppins dark:text-white text-nft-black-1 font-normal text-xs minlg:text-lg outline-none'
+                  onChange={(e) => setLoanID(e.target.value)}
                 />
               </div>
               <div className='flexEnd m-5'>
