@@ -1,11 +1,54 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 
 import images from "../assets";
 
 import { Button, Navbar } from "../components";
 
+import { DivvyContext } from "../context/DivvyContext";
+
 const investment = () => {
+  const {
+    fetchLoanAmount,
+    fetchRepayAmount,
+    fetchInstallmentAmount,
+    fetchTenure,
+  } = useContext(DivvyContext);
+  const [loanAmount, setLoanAmount] = useState(0);
+  const [repayAmount, setRepayAmount] = useState(0);
+  const [installmentAmount, setInstallmentAmount] = useState(0);
+  const [tenure, setTenure] = useState(0);
+
+  useEffect(() => {
+    const fetchAmt = async () => {
+      await fetchLoanAmount().then((loan) => {
+        setLoanAmount(loan);
+      });
+      fetchAmt();
+    };
+
+    const fetchRepayAmt = async () => {
+      await fetchRepayAmount().then((repay) => {
+        setRepayAmount(repay);
+      });
+      fetchRepayAmt();
+    };
+
+    const fetchInstallationAmt = async () => {
+      await fetchInstallmentAmount().then((ins) => {
+        setRepayAmount(ins);
+      });
+      fetchInstallationAmt();
+    };
+
+    const fetchTenureTime = async () => {
+      await fetchTenure().then((ten) => {
+        setTenure(ten);
+      });
+      fetchTenureTime();
+    };
+  }, [loanAmount, repayAmount, installmentAmount, tenure]);
+
   return (
     <>
       <div className='flex flexCenterStart w-full z-10 p-4 flex-row border-b bg-nft-dark border-nft-black-1 h-[49.2rem]'>
@@ -17,7 +60,7 @@ const investment = () => {
               </h1>
             </div>
             <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-              $100,000
+              {`${loanAmount} ETH`}
             </div>
           </div>
 
@@ -28,7 +71,7 @@ const investment = () => {
               </h1>
             </div>
             <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-              $120,000
+              {`${repayAmount} ETH`}
             </div>
           </div>
 
@@ -40,7 +83,10 @@ const investment = () => {
                 </h1>
               </div>
               <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-                $1,000
+                {`${installmentAmount} ETH`}
+              </div>
+              <div className='font-mono opacity-50'>
+                {tenure} installments left
               </div>
             </div>
             <div className='flex flex-col justify-around flexCenter'>

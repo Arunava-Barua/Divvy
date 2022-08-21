@@ -24,7 +24,7 @@ const ButtonGroup = ({ setActive, router, setIsOpen, isMobile }) => {
 
 const Navbar = () => {
   const { currentAccount } = useContext(DivvyContext);
-  let admin = true;
+  let admin = false;
 
   return (
     <nav className='flex justify-around w-screen fixed z-10 p-4 flex-row border-b dark:bg-nft-dark bg-white dark:border-nft-black-1 border-nft-gray-1'>
@@ -52,7 +52,7 @@ const Navbar = () => {
             <Button
               btnName='Loan'
               classStyles='mx-2 rounded-xl'
-              moveTo='/loan'
+              moveTo='/loandashboard'
             />
           </>
         ) : currentAccount ? (
@@ -65,7 +65,7 @@ const Navbar = () => {
             <Button
               btnName='Loan'
               classStyles='mx-2 rounded-xl'
-              moveTo='/loan'
+              moveTo='/loandashboard'
             />
           </>
         ) : (

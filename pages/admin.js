@@ -35,6 +35,7 @@ const admin = () => {
                 type='number'
                 placeholder='Enter Amount (ETH)'
                 className='m-5 h-full flex-1 w-full dark:bg-nft-black-2 bg-white px-4 rounded-md font-poppins dark:text-white text-nft-black-1 font-normal text-xs minlg:text-lg outline-none'
+                min='0'
               />
             </div>
             <div className='flexEnd m-5'>
