@@ -6,50 +6,163 @@ import images from "../assets";
 import { Button, Navbar } from "../components";
 
 import { DivvyContext } from "../context/DivvyContext";
+import Web3Modal from "web3modal";
+import { ethers } from "ethers";
+
+import {
+  DivvyAddress,
+  DivvyAddressABI,
+  PoolAddress,
+  PoolAddressABI,
+} from "../context/constants";
 
 const investment = () => {
-  const {
-    fetchLoanAmount,
-    fetchRepayAmount,
-    fetchInstallmentAmount,
-    fetchTenure,
-    loanID,
-    setLoanID,
-  } = useContext(DivvyContext);
+  const { loanID, setLoanID } = useContext(DivvyContext);
   const [loanAmount, setLoanAmount] = useState(0);
   const [repayAmount, setRepayAmount] = useState(0);
   const [installmentAmount, setInstallmentAmount] = useState(0);
   const [tenure, setTenure] = useState(0);
 
+  const fetchLoanAmount = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(
+        DivvyAddress,
+        DivvyAddressABI,
+        signer
+      );
+
+      try {
+        const txRes = await contract.loanAmt();
+        const res = ethers.utils.formatEther(txRes);
+        setLoanAmount(res);
+
+        console.log("Done");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const fetchRepayAmount = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(
+        DivvyAddress,
+        DivvyAddressABI,
+        signer
+      );
+      try {
+        const txRes = await contract.repayAmt();
+        const res = ethers.utils.formatEther(txRes);
+        setRepayAmount(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const fetchInstallmentAmount = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(
+        DivvyAddress,
+        DivvyAddressABI,
+        signer
+      );
+      try {
+        const txRes = await contract.installmentAmt();
+        const res = ethers.utils.formatEther(txRes);
+        setInstallmentAmount(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const fetchTenure = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(
+        DivvyAddress,
+        DivvyAddressABI,
+        signer
+      );
+      try {
+        const txRes = await contract.tenure();
+        const res = txRes.toString();
+        setTenure(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const createPayDue = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = new ethers.Contract(DivvyAddress, DivvyAddressABI, signer);
+
+    const dueAmount = await contract.installmentAmt();
+    const transaction = await contract.pay({ value: dueAmount });
+
+    await transaction.wait();
+  };
+
+  const createPayFull = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = new ethers.Contract(DivvyAddress, DivvyAddressABI, signer);
+
+    const repayAmount = await contract.fullPaymentWithPenalty();
+    const transaction = await contract.payInFull({
+      value: repayAmount.toString(),
+    });
+
+    await transaction.wait();
+  };
+
   useEffect(() => {
-    const fetchAmt = async () => {
-      await fetchLoanAmount().then((loan) => {
-        setLoanAmount(loan);
-      });
-      fetchAmt();
+    const loanAmt = async () => {
+      await fetchLoanAmount().then((loan) => {});
     };
+    loanAmt();
+  }, []);
 
+  useEffect(() => {
+    const tenureAmt = async () => {
+      await fetchTenure().then((tenure) => {});
+    };
+    tenureAmt();
+  }, []);
+
+  useEffect(() => {
     const fetchRepayAmt = async () => {
-      await fetchRepayAmount().then((repay) => {
-        setRepayAmount(repay);
-      });
-      fetchRepayAmt();
+      await fetchRepayAmount().then((repay) => {});
     };
+    fetchRepayAmt();
+  }, []);
 
-    const fetchInstallationAmt = async () => {
-      await fetchInstallmentAmount().then((ins) => {
-        setRepayAmount(ins);
-      });
-      fetchInstallationAmt();
+  useEffect(() => {
+    const fetchInstallAmt = async () => {
+      await fetchInstallmentAmount().then((install) => {});
     };
-
-    const fetchTenureTime = async () => {
-      await fetchTenure().then((ten) => {
-        setTenure(ten);
-      });
-      fetchTenureTime();
-    };
-  }, [loanAmount, repayAmount, installmentAmount, tenure]);
+    fetchInstallAmt();
+  }, []);
 
   return (
     <>
@@ -94,13 +207,13 @@ const investment = () => {
                 btnName='Pay Due'
                 btnType='primary'
                 classStyles='rounded-md w-max m-2'
-                handleClick={() => {}}
+                handleClick={createPayDue}
               />
               <Button
                 btnName='Pay Full'
                 btnType='primary'
                 classStyles='rounded-md w-max m-2'
-                handleClick={() => {}}
+                handleClick={() => createPayFull()}
               />
               <div className='flexBetween flex-col md:w-full minlg:w-557 w-357 mt-6 bg-nft-black-2 border-nft-black-2  rounded-md'>
                 <input

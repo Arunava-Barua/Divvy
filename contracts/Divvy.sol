@@ -39,6 +39,7 @@ contract Divvy is ERC721URIStorage, KeeperCompatibleInterface {
     // uint public immutable interval = (30 days);
     uint public immutable interval;
     uint public lastTimeStamp;
+    uint public id;
 
     event initEvent(
         address _buyer,
@@ -71,8 +72,12 @@ contract Divvy is ERC721URIStorage, KeeperCompatibleInterface {
 
         // Create a unique identifier for the token (NFT) created
         _setTokenURI(newTokenId, tokenURI);
-
+        id = newTokenId;
         return newTokenId;
+    }
+
+    function getId() public view returns (uint) {
+        return id;
     }
 
     function init(

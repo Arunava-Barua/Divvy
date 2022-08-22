@@ -98,6 +98,7 @@ export const DivvyProvider = ({ children }) => {
         DivvyAddressABI,
         signer
       );
+
       try {
         const txRes = await contract.loanAmt();
         console.log(ethers.utils.formatEther(txRes));
@@ -196,13 +197,17 @@ export const DivvyProvider = ({ children }) => {
 
     const transaction = await contract.createToken(url);
 
-    await transaction.wait();
-    await contract.init(
-      walletAddress.toString(),
-      loanAmount,
-      tenure,
-      transaction
-    );
+    const res = await transaction.wait(1);
+
+    let id = await contract.getId();
+    console.log({ res });
+    id = id.toString();
+
+    console.log({ id });
+
+    console.log(walletAddress.toString(), loanAmount, tenure, transaction);
+
+    await contract.init(walletAddress, loanAmount, tenure, id);
   };
 
   const createPayDue = async () => {
