@@ -52,6 +52,10 @@ contract Pool is KeeperCompatibleInterface {
         emit depositAmount(msg.sender, msg.value);
     }
 
+    function investedAmount() public view returns (uint) {
+        return perPersonAmount[msg.sender].investedAmount;
+    }
+
     function transferEther(uint amount, address payable to)
         public
         payable

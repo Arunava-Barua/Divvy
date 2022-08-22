@@ -54,43 +54,41 @@ const investment = () => {
   return (
     <>
       <div className='flex flexCenterStart w-full z-10 p-4 flex-row border-b bg-nft-dark border-nft-black-1 h-[49.2rem]'>
-        <div className='w-1/3 p-10 flexCenterStart h-1/3 '>
-          <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-            <div className=''>
-              <h1 className='text-2xl font-mono font-normal drop-shadow-md '>
-                Loan Amount:
-              </h1>
-            </div>
-            <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-              {`${loanAmount} ETH`}
-            </div>
-          </div>
-
-          <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-            <div className=''>
-              <h1 className='text-2xl font-mono font-normal drop-shadow-md '>
-                Repay Amount:
-              </h1>
-            </div>
-            <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-              {`${repayAmount} ETH`}
-            </div>
-          </div>
-
-          <div className='w-full '>
+        <div className='flex flex-col'>
+          <div className='p-10 flexCenterStart '>
             <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-              <div className=''>
-                <h1 className='text-2xl font-mono font-normal drop-shadow-md '>
-                  Next Installment:
-                </h1>
-              </div>
-              <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-                {`${installmentAmount} ETH`}
-              </div>
+              <h1 className='text-center text-2xl drop-shadow-md min min-w-155'>
+                Loan Amount
+              </h1>
+              <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
+                {`${loanAmount && loanAmount} ETH`}
+              </p>
+            </div>
+
+            <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
+              <h1 className='text-center text-2xl drop-shadow-md min min-w-190'>
+                Repay Amount
+              </h1>
+              <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
+                {`${repayAmount && repayAmount} ETH`}
+              </p>
+            </div>
+
+            <div className='flex flex-col items-center justify-center flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
+              <h1 className='text-2xl drop-shadow-md min min-w-190 text-center'>
+                Next Installment
+              </h1>
+              <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
+                {`${installmentAmount && installmentAmount} ETH`}
+              </p>
+
               <div className='font-mono opacity-50'>
                 {tenure} installments left
               </div>
             </div>
+          </div>
+
+          <div>
             <div className='flex flex-col justify-around flexCenter'>
               <Button
                 btnName='Pay Due'

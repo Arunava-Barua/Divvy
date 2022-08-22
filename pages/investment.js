@@ -1,52 +1,78 @@
 import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 
+import Web3Modal from "web3modal";
+import { ethers } from "ethers";
+
+import {
+  DivvyAddress,
+  DivvyAddressABI,
+  PoolAddress,
+  PoolAddressABI,
+} from "../context/constants";
+
 import images from "../assets";
 import { Button, Navbar } from "../components/index.js";
 import { DivvyContext } from "../context/DivvyContext.js";
 
 const investment = () => {
-  const { fetchPoolBalance, investWithdrawInput, setInvestWithdrawInput } =
-    useContext(DivvyContext);
+  const {
+    investWithdrawInput,
+    setInvestWithdrawInput,
+    invest,
+    withdraw,
+    investedAmount,
+    fetchInvestedAmount,
+  } = useContext(DivvyContext);
   const [poolBalance, setPoolBalance] = useState(0);
 
-  useEffect(() => {
-    const fetchPoolAmt = async () => {
-      await fetchPoolBalance().then((bal) => {
-        setPoolBalance(bal);
-      });
-      fetchPoolAmt();
-    };
-  }, [poolBalance]);
+  const fetchPoolBalance = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
 
-  console.log(investWithdrawInput);
+      const contract = new ethers.Contract(PoolAddress, PoolAddressABI, signer);
+      try {
+        const txRes = await contract.balance();
+        const res = ethers.utils.formatEther(txRes);
+        setPoolBalance(res);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const callFunc = async () => {
+      await fetchPoolBalance();
+      await fetchInvestedAmount();
+    };
+    callFunc();
+  }, []);
 
   return (
     <>
       <div className='flex flexCenterStart w-full z-10 p-4 flex-row border-b bg-nft-dark border-nft-black-1 h-[49.2rem]'>
         <div className='w-1/2 p-10 flexCenterStart h-2/3'>
           <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-            <div className=''>
-              <h1 className='text-4xl font-mono font-normal drop-shadow-md '>
-                Total Balance:
-              </h1>
-            </div>
-            <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-              {`${poolBalance} ETH`}
-            </div>
+            <h1 className='text-center text-2xl drop-shadow-md min min-w-155'>
+              Total Balance
+            </h1>
+            <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
+              {`${poolBalance && poolBalance} ETH`}
+            </p>
           </div>
         </div>
 
         <div className='w-1/2 p-10 flexCenterStart flex-col'>
           <div className='flex flex-col flexStartCenter w-2/3 p-10 investedAmount rounded-2xl h-1/3 m-20 drop-shadow-xl'>
-            <div className=''>
-              <h1 className='text-4xl font-mono font-normal drop-shadow-md'>
-                Invested Amount:
-              </h1>
-            </div>
-            <div className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md'>
-              $80,000
-            </div>
+            <h1 className='text-center text-2xl drop-shadow-md min min-w-155'>
+              Invested Amount
+            </h1>
+            <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
+              {`${investedAmount && investedAmount} ETH`}
+            </p>
           </div>
 
           <div className='flex flexCenter flex-col w-full'>
@@ -67,6 +93,7 @@ const investment = () => {
                   btnName='Invest'
                   btnType='primary'
                   classStyles='rounded-md'
+                  handleClick={invest}
                 />
               </div>
             </div>
@@ -88,6 +115,7 @@ const investment = () => {
                   btnName='Withdraw'
                   btnType='primary'
                   classStyles='rounded-md'
+                  handleClick={withdraw}
                 />
               </div>
             </div>

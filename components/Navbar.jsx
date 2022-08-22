@@ -27,15 +27,19 @@ const Navbar = () => {
   let admin = false;
 
   return (
-    <nav className='flex justify-around w-screen fixed z-10 p-4 flex-row border-b dark:bg-nft-dark bg-white dark:border-nft-black-1 border-nft-gray-1'>
+    <nav className='flex items-center justify-around w-screen fixed z-10 p-4 flex-row border-b dark:bg-nft-dark bg-white dark:border-nft-black-1 border-nft-gray-1'>
       {/* <div className="md:hidden flex justify-around"> */}
-      <Image
-        src={images.logo02}
-        objectFit='contain'
-        width={32}
-        height={32}
-        alt='logo'
-      />
+      <div className='rounded-md white-glassmorphism p-3 hover:cursor-pointer'>
+        <Link href='/'>
+          <Image
+            src={images.decentralized}
+            objectFit='contain'
+            width={32}
+            height={32}
+            alt='logo'
+          />
+        </Link>
+      </div>
       <div className='ml-4'>
         {currentAccount && admin ? (
           <>

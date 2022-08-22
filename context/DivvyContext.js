@@ -12,7 +12,10 @@ import {
 
 // const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
-const fetchContract = (signerOrProvider) =>
+const fetchDivvyContract = (signerOrProvider) =>
+  new ethers.Contract(DivvyAddress, DivvyAddressABI, signerOrProvider);
+
+const fetchPoolContract = (signerOrProvider) =>
   new ethers.Contract(DivvyAddress, DivvyAddressABI, signerOrProvider);
 
 export const DivvyContext = React.createContext();
@@ -37,7 +40,7 @@ export const DivvyProvider = ({ children }) => {
     address: "",
     amount: "",
   });
-  const [poolBalance, setPoolBalance] = useState(0);
+  const [investedAmount, setInvestedAmount] = useState(0);
 
   // Check if it is connected to wallet
   const checkIfWalletIsConnect = async () => {
@@ -174,7 +177,7 @@ export const DivvyProvider = ({ children }) => {
       try {
         const txRes = await contract.balance();
         const res = ethers.utils.formatEther(txRes);
-        setPoolBalance(res);
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -189,15 +192,15 @@ export const DivvyProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner(); //who is creating an NFT
 
-    const contract = fetchContract(signer);
+    const contract = new ethers.Contract(DivvyAddress, DivvyAddressABI, signer);
 
     const transaction = await contract.createToken(url);
 
     await transaction.wait();
     await contract.init(
       walletAddress.toString(),
-      loanAmount.toString(),
-      tenure.toString(),
+      loanAmount,
+      tenure,
       transaction
     );
   };
@@ -255,7 +258,7 @@ export const DivvyProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner(); //who is creating an NFT
 
-    const contract = fetchContract(signer);
+    const contract = new ethers.Contract(PoolAddress, PoolAddressABI, signer);
 
     const receiveETH = await contract.receiveEther({
       value: invest,
@@ -272,11 +275,26 @@ export const DivvyProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner(); //who is creating an NFT
 
-    const contract = fetchContract(signer);
+    const contract = new ethers.Contract(PoolAddress, PoolAddressABI, signer);
 
     const withdrawAmt = await contract.withdraw(withdraw);
 
     await withdrawAmt.wait();
+  };
+
+  const fetchInvestedAmount = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //who is creating an NFT
+
+    const contract = new ethers.Contract(PoolAddress, PoolAddressABI, signer);
+
+    const txRes = await contract.investedAmount();
+    const investedAmt = ethers.utils.formatEther(txRes);
+
+    // await txRes.wait();
+    setInvestedAmount(investedAmt);
   };
 
   const tranferETH = async () => {
@@ -287,7 +305,7 @@ export const DivvyProvider = ({ children }) => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner(); //who is creating an NFT
 
-    const contract = fetchContract(signer);
+    const contract = fetchPoolContract(signer);
 
     const transferETH = await contract.transferEther(amount, address);
 
@@ -332,7 +350,8 @@ export const DivvyProvider = ({ children }) => {
         adminState,
         setAdminState,
         tranferETH,
-        poolBalance,
+        investedAmount,
+        fetchInvestedAmount,
       }}
     >
       {children}

@@ -45,12 +45,9 @@ const FormFillUp = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const [fileUrl, setFileUrl] = useState(null);
-  // const [formInput, setFormInput] = useState({
-  //   price: "",
-  //   name: "",
-  //   description: "",
-  // });
-  const { formInput, setFormInput } = useContext(DivvyContext);
+
+  const { formInput, setFormInput, createTokenSubmit } =
+    useContext(DivvyContext);
 
   const onDrop = useCallback(async (acceptedFile) => {
     //upload image to ipfs
@@ -84,21 +81,30 @@ const FormFillUp = () => {
   );
 
   const createNFT = async (formInput, fileUrl, router) => {
-    const { name, description, price } = formInput;
+    const { walletAddress, loanAmount, tenure } = formInput;
+    console.log(formInput);
 
-    if (!name || !description || !price || !fileUrl) return;
+    if (!walletAddress || !loanAmount || !tenure || !fileUrl) return;
 
-    const data = JSON.stringify({ name, description, image: fileUrl });
+    const data = JSON.stringify({
+      walletAddress,
+      loanAmount,
+      image: fileUrl,
+    });
 
     try {
+      console.log(data);
       const added = await client.add(data);
 
       const url = `https://divvy-bank.infura-ipfs.io/ipfs/${added.path}`;
 
       console.log(`URL ---> ${url}`);
+
+      await createTokenSubmit(url);
+
       router.push("/loandashboard");
     } catch (error) {
-      console.log("Error uploading file to IPFS.");
+      console.log(error);
     }
   };
 

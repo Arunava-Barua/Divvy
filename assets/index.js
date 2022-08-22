@@ -39,6 +39,7 @@ import loader from "./loader.gif";
 import arrow from "./arrow.png";
 import crypto from "./crypto.jpg";
 import constellation from "./constellation.svg";
+import decentralized from "./decentralized.png";
 
 export default {
   heartOutline,
@@ -82,4 +83,5 @@ export default {
   arrow,
   crypto,
   constellation,
+  decentralized,
 };
