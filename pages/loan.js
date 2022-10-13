@@ -32,8 +32,7 @@ const uploadToIPFS = async (file) => {
 
     //path to our newly created NFT
     // const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-    const url = `https://divvy-bank.infura-ipfs.io/ipfs/${added.path}
-    `;
+    const url = `https://divvy-bank.infura-ipfs.io/ipfs/${added.path}`;
 
     return url;
   } catch (error) {

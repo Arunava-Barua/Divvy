@@ -1,16 +1,16 @@
 // const fs = require("fs");
 require("@nomiclabs/hardhat-waffle");
+require("dotenv").config();
 
-// const privateKey = fs.readFileSync(".secret").toString().trim();
+const { NEXT_PUBLIC_API_URL, NEXT_PUBLIC_PRIVATE_KEY } = process.env;
 
 module.exports = {
+  defaultNetwork: "polygon_mumbai",
   networks: {
-    hardhat: {
-      chainId: 1337,
-      allowUnlimitedContractSize: true,
-    },
-    localhost: {
-      allowUnlimitedContractSize: true,
+    hardhat: {},
+    polygon_mumbai: {
+      url: NEXT_PUBLIC_API_URL,
+      accounts: [`0x${NEXT_PUBLIC_PRIVATE_KEY}`],
     },
   },
   solidity: "0.8.4",

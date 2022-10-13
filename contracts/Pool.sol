@@ -10,12 +10,21 @@ contract Pool is KeeperCompatibleInterface {
 
     uint public immutable interval;
     uint public lastTimeStamp;
+    event log(string message);
 
     constructor() {
         owner = msg.sender;
 
         interval = 31536000; // 1 year in sec
         lastTimeStamp = block.timestamp;
+    }
+
+    receive() external payable {
+        emit log("receive");
+    }
+
+    fallback() external payable {
+        emit log("fallback");
     }
 
     struct AmountInterest {
@@ -54,6 +63,10 @@ contract Pool is KeeperCompatibleInterface {
 
     function investedAmount() public view returns (uint) {
         return perPersonAmount[msg.sender].investedAmount;
+    }
+
+    function accountBal() public view returns (uint) {
+        return perPersonAmount[msg.sender].accountBalance;
     }
 
     function transferEther(uint amount, address payable to)

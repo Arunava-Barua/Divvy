@@ -106,6 +106,24 @@ const investment = () => {
     }
   };
 
+  const fetchSettleLoan = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+
+      const contract = new ethers.Contract(
+        DivvyAddress,
+        DivvyAddressABI,
+        signer
+      );
+      try {
+        await contract.settleLoan();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const createPayDue = async () => {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
@@ -166,37 +184,43 @@ const investment = () => {
 
   return (
     <>
-      <div className='flex flexCenterStart w-full z-10 p-4 flex-row border-b bg-nft-dark border-nft-black-1 h-[49.2rem]'>
+      <div className='flex flexCenterStart w-full z-10 p-4 flex-row border-b bg-nft-dark border-nft-black-1 h-[49.2rem] overflow-hidden'>
         <div className='flex flex-col'>
-          <div className='p-10 flexCenterStart '>
+          <div className='p-10 flexCenterStart'>
             <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-              <h1 className='text-center text-2xl drop-shadow-md min min-w-155'>
+              <h1 className='text-center text-2xl drop-shadow-md min min-w-155 mb-4 text-font'>
                 Loan Amount
               </h1>
-              <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
-                {`${loanAmount && loanAmount} ETH`}
-              </p>
+              <div className='rounded-md white-glassmorphism p-3 '>
+                <p className='text-6xl font-mono font-extrabold pb-1 drop-shadow-md whitespace-nowrap'>
+                  {`${loanAmount && loanAmount} ETH`}
+                </p>
+              </div>
             </div>
 
             <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-              <h1 className='text-center text-2xl drop-shadow-md min min-w-190'>
+              <h1 className='text-center text-2xl drop-shadow-md min min-w-190 mb-4 text-font'>
                 Repay Amount
               </h1>
-              <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
-                {`${repayAmount && repayAmount} ETH`}
-              </p>
+              <div className='rounded-md white-glassmorphism p-3'>
+                <p className='text-6xl font-mono font-extrabold pb-1 drop-shadow-md whitespace-nowrap'>
+                  {`${repayAmount && repayAmount} ETH`}
+                </p>
+              </div>
             </div>
 
             <div className='flex flex-col items-center justify-center flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-              <h1 className='text-2xl drop-shadow-md min min-w-190 text-center'>
+              <h1 className='text-2xl drop-shadow-md min min-w-190 text-center mb-4 text-font'>
                 Next Installment
               </h1>
-              <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
-                {`${installmentAmount && installmentAmount} ETH`}
-              </p>
+              <div className='rounded-md white-glassmorphism p-3'>
+                <p className='text-6xl font-mono font-extrabold pb-1 drop-shadow-md whitespace-nowrap'>
+                  {`${installmentAmount && installmentAmount} ETH`}
+                </p>
+              </div>
 
-              <div className='font-mono opacity-50'>
-                {tenure} installments left
+              <div className='font-mono opacity-50 mt-1'>
+                <strong>{tenure}</strong> installments left
               </div>
             </div>
           </div>
@@ -215,21 +239,13 @@ const investment = () => {
                 classStyles='rounded-md w-max m-2'
                 handleClick={() => createPayFull()}
               />
-              <div className='flexBetween flex-col md:w-full minlg:w-557 w-357 mt-6 bg-nft-black-2 border-nft-black-2  rounded-md'>
-                <input
-                  type='number'
-                  placeholder='Enter Loan Id'
-                  min='0'
-                  className='m-5 h-full flex-1 w-full dark:bg-nft-black-2 bg-white px-4 rounded-md font-poppins dark:text-white text-nft-black-1 font-normal text-xs minlg:text-lg outline-none'
-                  onChange={(e) => setLoanID(e.target.value)}
-                />
-              </div>
+
               <div className='flexEnd m-5'>
                 <Button
                   btnName='Settle'
                   btnType='primary'
                   classStyles='rounded-md m-2'
-                  handleClick={() => {}}
+                  handleClick={() => fetchSettleLoan()}
                 />
               </div>
             </div>

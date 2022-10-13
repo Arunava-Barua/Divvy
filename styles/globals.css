@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Courgette&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Courgette&family=Poppins&display=swap");
 /* ./styles/globals.css */
 @tailwind base;
 @tailwind components;
@@ -218,7 +219,7 @@
     radial-gradient(at 74% 89%, hsla(30, 98%, 65%, 1) 0, transparent 51%),
     radial-gradient(at 53% 75%, hsla(174, 94%, 68%, 1) 0, transparent 45%); */
 
-  background-color: hsla(21, 81%, 59%, 1);
+  background-color: rgb(235, 125, 66);
   background-image: radial-gradient(
       at 40% 20%,
       hsla(28, 100%, 74%, 1) 0px,
@@ -239,7 +240,7 @@
       hsla(0, 0%, 100%, 1) 0,
       transparent 53%
     ),
-    radial-gradient(at 100% 60%, rgb(0, 0, 0) 0, transparent 50%);
+    radial-gradient(at 100% 60%, rgb(235, 125, 66) 0, transparent 50%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -251,4 +252,12 @@
 
 .slider-main li.slick-active button:before {
   color: white;
+}
+
+.divvy-font {
+  font-family: "Courgette", cursive;
+}
+
+.text-font {
+  font-family: "Poppins", sans-serif;
 }

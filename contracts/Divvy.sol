@@ -34,12 +34,11 @@ contract Divvy is ERC721URIStorage, KeeperCompatibleInterface {
     mapping(address => Loan) public addressToLoan;
 
     address payable public seller;
-
+    uint public id;
     // uint public intervalTimes;
     // uint public immutable interval = (30 days);
     uint public immutable interval;
     uint public lastTimeStamp;
-    uint public id;
 
     event initEvent(
         address _buyer,
@@ -143,7 +142,11 @@ contract Divvy is ERC721URIStorage, KeeperCompatibleInterface {
 
         present.repayAmount -= msg.value;
         present.intervalTimes--;
-        seller.transfer(msg.value);
+
+        //seller.transfer(msg.value);
+        (bool res, bytes memory data) = seller.call{value: msg.value}("");
+
+        require(res, "Transfer failed");
     }
 
     function checkUpkeep(
@@ -184,7 +187,9 @@ contract Divvy is ERC721URIStorage, KeeperCompatibleInterface {
 
         present.completed = true;
 
-        seller.transfer(msg.value);
+        (bool res, bytes memory data) = seller.call{value: msg.value}("");
+
+        require(res, "Transfer failed");
 
         emit FullPaidEvent(msg.sender, msg.value);
     }

@@ -40,6 +40,7 @@ import arrow from "./arrow.png";
 import crypto from "./crypto.jpg";
 import constellation from "./constellation.svg";
 import decentralized from "./decentralized.png";
+import divvyLogo from "./divvy-logo.png";
 
 export default {
   heartOutline,
@@ -84,4 +85,5 @@ export default {
   crypto,
   constellation,
   decentralized,
+  divvyLogo,
 };

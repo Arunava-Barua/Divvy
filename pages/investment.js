@@ -26,14 +26,14 @@ const investment = () => {
   } = useContext(DivvyContext);
   const [poolBalance, setPoolBalance] = useState(0);
 
-  const fetchPoolBalance = async () => {
+  const fetchAccountBalance = async () => {
     if (typeof window.ethereum !== "undefined") {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
 
       const contract = new ethers.Contract(PoolAddress, PoolAddressABI, signer);
       try {
-        const txRes = await contract.balance();
+        const txRes = await contract.accountBal();
         const res = ethers.utils.formatEther(txRes);
         setPoolBalance(res);
         console.log(res);
@@ -45,8 +45,7 @@ const investment = () => {
 
   useEffect(() => {
     const callFunc = async () => {
-      await fetchPoolBalance();
-      await fetchInvestedAmount();
+      await fetchAccountBalance();
     };
     callFunc();
   }, []);
@@ -56,23 +55,27 @@ const investment = () => {
       <div className='flex flexCenterStart w-full z-10 p-4 flex-row border-b bg-nft-dark border-nft-black-1 h-[49.2rem]'>
         <div className='w-1/2 p-10 flexCenterStart h-2/3'>
           <div className='flex flex-col flexCenter w-2/3 h-full p-10 investedAmount rounded-2xl m-20 drop-shadow-xl'>
-            <h1 className='text-center text-2xl drop-shadow-md min min-w-155'>
-              Total Balance
+            <h1 className='text-center text-2xl drop-shadow-md min min-w-155 mb-4 text-font'>
+              Total balance
             </h1>
-            <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
-              {`${poolBalance && poolBalance} ETH`}
-            </p>
+            <div className='rounded-md white-glassmorphism p-3 '>
+              <p className='text-6xl font-mono font-extrabold pb-1 drop-shadow-md whitespace-nowrap'>
+                {`${poolBalance && poolBalance} ETH`}
+              </p>
+            </div>
           </div>
         </div>
 
         <div className='w-1/2 p-10 flexCenterStart flex-col'>
           <div className='flex flex-col flexStartCenter w-2/3 p-10 investedAmount rounded-2xl h-1/3 m-20 drop-shadow-xl'>
-            <h1 className='text-center text-2xl drop-shadow-md min min-w-155'>
+            <h1 className='text-center text-2xl drop-shadow-md min min-w-155 mb-4 text-font'>
               Invested Amount
             </h1>
-            <p className='text-6xl font-mono font-extrabold pt-5 drop-shadow-md whitespace-nowrap'>
-              {`${investedAmount && investedAmount} ETH`}
-            </p>
+            <div className='rounded-md white-glassmorphism p-3 '>
+              <p className='text-6xl font-mono font-extrabold pb-1 drop-shadow-md whitespace-nowrap'>
+                {`${investedAmount && investedAmount} ETH`}
+              </p>
+            </div>
           </div>
 
           <div className='flex flexCenter flex-col w-full'>

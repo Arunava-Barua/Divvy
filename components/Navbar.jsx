@@ -24,15 +24,15 @@ const ButtonGroup = ({ setActive, router, setIsOpen, isMobile }) => {
 
 const Navbar = () => {
   const { currentAccount } = useContext(DivvyContext);
-  let admin = false;
+  let admin = true;
 
   return (
     <nav className='flex items-center justify-around w-screen fixed z-10 p-4 flex-row border-b dark:bg-nft-dark bg-white dark:border-nft-black-1 border-nft-gray-1'>
       {/* <div className="md:hidden flex justify-around"> */}
-      <div className='rounded-md white-glassmorphism p-3 hover:cursor-pointer'>
+      <div className='rounded-md white-glassmorphism pt-3 pl-3 pr-3 pb-[0.35rem] hover:cursor-pointer'>
         <Link href='/'>
           <Image
-            src={images.decentralized}
+            src={images.divvyLogo}
             objectFit='contain'
             width={32}
             height={32}

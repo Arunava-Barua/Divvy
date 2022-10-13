@@ -30,12 +30,15 @@ const Footer = () => {
         <div className='flexStart flex-1 flex-col'>
           <div className='flexCenter cursor-pointer sm:pt-4'>
             <Link href='/'>
-              <div className='rounded-md white-glassmorphism  p-3 hover:cursor-pointer mr-3'>
+              <div
+                className='white-glassmorphism pt-2 pr-2 pl-2 pb-[0.2rem] hover:cursor-pointer mr-3'
+                style={{ borderRadius: "12px" }}
+              >
                 <Image
-                  src={images.decentralized}
+                  src={images.divvyLogo}
                   objectFit='contain'
-                  width={32}
-                  height={32}
+                  width={24}
+                  height={24}
                   alt='logo'
                 />
               </div>

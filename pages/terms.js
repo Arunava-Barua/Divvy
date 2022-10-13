@@ -20,37 +20,89 @@ const terms = () => {
 
   return (
     <div className='flex items-center justify-center w-full nav-h'>
-      {/* <div className='p-52 bg-red-400'>apple</div> */}
       <div className='overflow-hidden pl-36 pr-36 pt-36 pb-36'>
         <div className='rounded-2xl shadow-grad'>
           <Slider
             {...settings}
             className='min-h-[200px] rounded-2xl p-3 backdrop-blur-sm slider-main'
           >
-            <div>
-              <p>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta
-                quia accusamus consectetur, esse suscipit voluptatibus ea ut
-                nihil repudiandae non hic veniam eligendi? Nemo, eos architecto.
-                Autem vel molestiae modi!
-              </p>
-            </div>
-            <div>
-              <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae
-                ducimus, eos veritatis reprehenderit aut, voluptate distinctio
-                cupiditate debitis molestias repellendus ratione at sint cumque
-                eius maxime eveniet! Quisquam, ut commodi?
-              </p>
-            </div>
-            <div>
-              <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vitae
-                ducimus, eos veritatis reprehenderit aut, voluptate distinctio
-                cupiditate debitis molestias repellendus ratione at sint cumque
-                eius maxime eveniet! Quisquam, ut commodi?
-              </p>
-            </div>
+            <ul>
+              <li>
+                <h1 className='text-2xl text-gradient font-bold text-center mb-4 text-font'>
+                  Terms and Conditions
+                </h1>
+                <div className='text-center text-font mb-1'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+                <div className='text-center text-font mb-1'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+                <div className='text-center text-font'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                <h1 className='text-2xl text-gradient font-bold text-center mb-4 text-font'>
+                  Terms and Conditions
+                </h1>
+                <div className='text-center text-font mb-1'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+                <div className='text-center text-font mb-1'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+                <div className='text-center text-font'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                <h1 className='text-2xl text-gradient font-bold text-center mb-4 text-font'>
+                  Terms and Conditions
+                </h1>
+                <div className='text-center text-font mb-1'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+                <div className='text-center text-font mb-1'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+                <div className='text-center text-font'>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Dicta quia accusamus consectetur
+                  </p>
+                </div>
+              </li>
+            </ul>
           </Slider>
         </div>
 

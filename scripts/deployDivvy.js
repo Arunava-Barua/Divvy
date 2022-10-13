@@ -4,7 +4,8 @@ const hre = require("hardhat");
 async function main() {
   const Divvy = await hre.ethers.getContractFactory("Divvy");
   const divvy = await Divvy.deploy(
-    "0x5FbDB2315678afecb367f032d93F642f64180aa3" // pool address
+    "0xd80bB2F749B4b556aeaB4A82aB5CE0608fca429b",
+    { gasLimit: 20287350, gasPrice: 252873500 } // pool address
   );
 
   await divvy.deployed();
